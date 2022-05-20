@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -56,7 +57,19 @@ public class result extends AppCompatActivity {
 
     List<LatLng> loc_coor=new ArrayList<LatLng>();
 
-    int[] player_seq = {1,2,3,4};
+    ArrayList<Integer> player_seq;
+
+    public static ArrayList<Integer> getRandomNonRepeatingIntegers(int size) {
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        Random random = new Random();
+        while (numbers.size() < size) {
+            int randomNumber = random.nextInt((size - 1) + 1) + 1;
+            if (!numbers.contains(randomNumber)) {
+                numbers.add(randomNumber);
+            }
+        }
+        return numbers;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +92,9 @@ public class result extends AppCompatActivity {
 
         assert supportMapFragment != null;
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onMapReady(@NonNull GoogleMap mMap) {
-
-                Random rand = new Random();
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
@@ -134,26 +146,21 @@ public class result extends AppCompatActivity {
                 outerhandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Handler myHandler2 = new Handler();
-                        for (int in = 0; in < 2; in++) {
-                            final int[] finalIn = {in};
-                            myHandler2.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                   //RANDOM FUNCTION INCOMPLETE
-                                    desc.setText("Player sequence: \n" + player_seq[0] +" " +
-                                            player_seq[1] +" "+ player_seq[2] +" "+ player_seq[3]);
-                                }
-                            }, 100);
+                        player_seq = getRandomNonRepeatingIntegers(numplayer);
+                        if (numplayer == 2){
+                            desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
+                                    player_seq.get(1));
+                        }
+                        else if(numplayer == 3){
+                            desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
+                                    player_seq.get(1) +" "+ player_seq.get(2));
+                        }
+                        else if (numplayer == 4){
+                            desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
+                                    player_seq.get(1) +" "+ player_seq.get(2) +" "+ player_seq.get(3));
                         }
                     }
                 }, 10000);
-
-
-
-
-
-
             }
         });
     }
