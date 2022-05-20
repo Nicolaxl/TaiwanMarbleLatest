@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,28 +24,53 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static android.content.ContentValues.TAG;
 
 
 public class result extends AppCompatActivity {
     MediaPlayer SGame;
-    Button start, stop, up, down, left, right;
-    static final LatLng THISCLASS = new LatLng(24.178326564014018, 120.6482920747276);
+    boolean atInit = false;
+    static final LatLng CENTRALTW = new LatLng(23.69781, 120.960515);
+    static final double[] pointX ={25.135389052877766, 25.039892147214466, 24.994926665365817,
+            24.835541700441734, 24.568817202678524, 24.150687238149203, 24.018558941060665,
+            23.72538947169954,  23.483252071214118, 23.007943047383666, 22.64992037875815,
+            22.576392912465863, 22.859536037828413, 23.9509282845216, 24.73666665642769};
+
+    static final double[] pointY ={121.74251014108933, 121.54609384840816, 121.32279953672855,
+            120.95270991261124, 120.80591458558824, 120.72528052859283, 120.46063545363027,
+            120.43906480284772,  120.45313389539437, 120.24418987930757, 120.25090763025693,
+            120.60659002175329, 121.16318071503659, 121.55594191188305, 121.77566847039398};
+
+    static final String[] cities_name = {"Keelung", "Taipei", "Taoyuan", "Hsinchu", "Miaoli", "Taichung",
+    "Taichung", "Yunlin", "Chiayi", "Tainan", "Kaohsiung", "Pingtung", "Taitung", "Hualien", "Yilan"};
+
+    PolylineOptions polylineOptions = new PolylineOptions();
+
+    List<LatLng> loc_coor=new ArrayList<LatLng>();
+
+    int[] player_seq = {1,2,3,4};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.FINAL_PLAYER);
-        Toast.makeText(result.this, message, Toast.LENGTH_SHORT).show();
+        TextView desc = (TextView)findViewById(R.id.desc);
 
-        start = (Button)findViewById(R.id.btn_start);
-        stop = (Button)findViewById(R.id.btn_stop);
-        up = (Button)findViewById(R.id.btn_up);
-        down = (Button)findViewById(R.id.btn_down);
-        left = (Button)findViewById(R.id.btn_left);
-        right = (Button)findViewById(R.id.btn_right);
+        for (int i = 0 ; i < pointX.length; i++){
+            loc_coor.add(new LatLng(pointX[i],pointY[i]));
+        };
+
+        Intent intent = getIntent();
+        int numplayer = Integer.parseInt(intent.getStringExtra(MainActivity.FINAL_PLAYER));
 
         SGame = MediaPlayer.create(getApplicationContext(), R.raw.apcey);
         SGame.setLooping(true);
@@ -55,62 +82,78 @@ public class result extends AppCompatActivity {
             @Override
             public void onMapReady(@NonNull GoogleMap mMap) {
 
-                LatLng TSH = new LatLng(24.163554905925793, 120.64733915466618);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(TSH));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+                Random rand = new Random();
 
-                final CameraPosition posisikamera = new CameraPosition.Builder().target(THISCLASS).zoom(17).build();
-                start.setOnClickListener(new View.OnClickListener() {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                desc.setText("Starting " + numplayer + " Players game" +
+                        "\n開始" + numplayer + "人遊戲" + "\n\n Initializing map 地圖初始中");
+
+
+                Handler myHandler = new Handler();
+                for (int in=0; in <=pointX.length;in++) {
+                    final int[] finalIn = {in};
+                    myHandler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (finalIn[0] == pointX.length){
+                                finalIn[0] = 0;
+                            }
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn[0])));
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                            polylineOptions.add(loc_coor.get(finalIn[0]));
+                            mMap.addPolyline(polylineOptions);
+                        }
+                    }, 400L * finalIn[0]);
+                }
+
+                final Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
                     @Override
-                    public void onClick(View v) {
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(posisikamera), 2000, new GoogleMap.CancelableCallback() {
+                    public void run() {
+                        final CameraPosition posisikamera = new CameraPosition.Builder().target(CENTRALTW).zoom(7).build();
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(posisikamera), 1000, new GoogleMap.CancelableCallback() {
                             @Override
                             public void onFinish() {
-                                Log.d("Map", "Animation finished");
+                                desc.setText("There are 15 cities \n 總共有15個城市 \n\n Buy them all to win this game!\n全部購買即可贏得遊戲！");
                             }
 
                             @Override
                             public void onCancel() {
-                                Log.d("Map", "Animation Interrupted");
+                                desc.setText("animateCamera Error！");
                             }
                         });
                     }
-                });
+                }, 6500);
 
-                stop.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMap.stopAnimation();
-                    }
-                });
+                final Boolean[] fdone = {false};
+                final int[] exempt = new int[1];
 
-                up.setOnClickListener(new View.OnClickListener() {
+                final Handler outerhandler = new Handler(Looper.getMainLooper());
+                outerhandler.postDelayed(new Runnable() {
                     @Override
-                    public void onClick(View v) {
-                        mMap.moveCamera(CameraUpdateFactory.scrollBy(0,-10));
+                    public void run() {
+                        Handler myHandler2 = new Handler();
+                        for (int in = 0; in < 2; in++) {
+                            final int[] finalIn = {in};
+                            myHandler2.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                   //RANDOM FUNCTION INCOMPLETE
+                                    desc.setText("Player sequence: \n" + player_seq[0] +" " +
+                                            player_seq[1] +" "+ player_seq[2] +" "+ player_seq[3]);
+                                }
+                            }, 100);
+                        }
                     }
-                });
+                }, 10000);
 
-                down.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMap.moveCamera(CameraUpdateFactory.scrollBy(0,10));
-                    }
-                });
 
-                left.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMap.moveCamera(CameraUpdateFactory.scrollBy(-10,0));
-                    }
-                });
 
-                right.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mMap.moveCamera(CameraUpdateFactory.scrollBy(10,0));
-                    }
-                });
+
+
+
             }
         });
     }

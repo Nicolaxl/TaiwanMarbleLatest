@@ -44,21 +44,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <RadioButton
-            android:id="@+id/radioButton1"
-            android:layout_width="300px"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="1 Player"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.500"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-
-            app:layout_constraintTop_toTopOf="@id/titleCH"
-            app:layout_constraintVertical_bias="0.160" />
-
-        <RadioButton
             android:id="@+id/radioButton2"
             android:layout_width="300px"
             android:layout_height="wrap_content"

@@ -64,15 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 selectedString = (String) radioButton.getText();
                 mpMain.stop();
                 switch (selectedString) {
-                    case "1 Player": {
-                        total_player = 1;
-                        send = String.valueOf(total_player);
-                        Intent intent = new Intent(MainActivity.this, result.class);
-                        intent.putExtra(FINAL_PLAYER, send);
-                        startActivity(intent);
-                        //Toast.makeText(MainActivity.this,radioButton.getText(), Toast.LENGTH_SHORT).show();
-                        break;
-                    }
                     case "2 Player": {
                         total_player = 2;
                         send = String.valueOf(total_player);
