@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         mpMain.start();
         radioGroup=(RadioGroup)findViewById(R.id.radioGroup);
         Button tombol =(Button) findViewById(R.id.button);
+        Button about =(Button) findViewById(R.id.about);
         tombol.setOnClickListener(action);
+        about.setOnClickListener(tentang);
     }
 
     @Override
@@ -51,7 +53,31 @@ public class MainActivity extends AppCompatActivity {
         mpMain.start();
     }
 
-    private View.OnClickListener action =new View.OnClickListener(){
+    private View.OnClickListener tentang = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+            builder1.setMessage("Created for \nGEOGRAPHIC INFORMATION SYSTEM Course Final Project" +
+                    "\n\n" + "Created by: 雷國亮 D0726433\n" + "With support from:\n"
+            + "李福龍 D0869861\n" + "熊海恩 D0896550");
+            builder1.setCancelable(true);
+
+            builder1.setNegativeButton(
+                    "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.setTitle("About");
+            alert11.show();
+
+        }
+    };
+
+    private View.OnClickListener action = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
             int selectedId = radioGroup.getCheckedRadioButtonId();
