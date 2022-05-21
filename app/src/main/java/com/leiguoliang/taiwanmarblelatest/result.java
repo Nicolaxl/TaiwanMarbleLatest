@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,8 +24,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -37,6 +42,12 @@ import static android.content.ContentValues.TAG;
 
 
 public class result extends AppCompatActivity {
+    final static int player_init_money = 500;
+    int icon_height = 133;
+    int icon_width = 80;
+
+    Marker p1_mark, p2_mark, p3_mark, p4_mark;
+
     MediaPlayer SGame;
     boolean atInit = false;
     static final LatLng CENTRALTW = new LatLng(23.69781, 120.960515);
@@ -55,9 +66,14 @@ public class result extends AppCompatActivity {
 
     PolylineOptions polylineOptions = new PolylineOptions();
 
-    List<LatLng> loc_coor=new ArrayList<LatLng>();
+    List<LatLng> loc_coor = new ArrayList<LatLng>();
+
+    int now;
 
     ArrayList<Integer> player_seq;
+    int[] player_money = new int[4];
+    int[] player_position = new int[4];
+    int[][] place_occ = new int[15][2];
 
     public static ArrayList<Integer> getRandomNonRepeatingIntegers(int size) {
         ArrayList<Integer> numbers = new ArrayList<Integer>();
@@ -78,6 +94,7 @@ public class result extends AppCompatActivity {
 
         TextView desc = (TextView)findViewById(R.id.desc);
 
+
         for (int i = 0 ; i < pointX.length; i++){
             loc_coor.add(new LatLng(pointX[i],pointY[i]));
         };
@@ -95,9 +112,26 @@ public class result extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onMapReady(@NonNull GoogleMap mMap) {
+                Bitmap rp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.player_red);
+                Bitmap rpbit = Bitmap.createScaledBitmap(rp, icon_width, icon_height, false);
+                BitmapDescriptor redp_icon = BitmapDescriptorFactory.fromBitmap(rpbit);
+
+                Bitmap yp = BitmapFactory.decodeResource(getResources(),R.drawable.player_yellow);
+                Bitmap ypbit = Bitmap.createScaledBitmap(yp, icon_width, icon_height, false);
+                BitmapDescriptor yellowp_icon = BitmapDescriptorFactory.fromBitmap(ypbit);
+
+                Bitmap gp = BitmapFactory.decodeResource(getResources(),R.drawable.player_green);
+                Bitmap gpbit = Bitmap.createScaledBitmap(gp, icon_width, icon_height, false);
+                BitmapDescriptor greenp_icon = BitmapDescriptorFactory.fromBitmap(gpbit);
+
+                Bitmap bp = BitmapFactory.decodeResource(getResources(),R.drawable.player_blue);
+                Bitmap bpbit = Bitmap.createScaledBitmap(bp, icon_width, icon_height, false);
+                BitmapDescriptor bluep_icon = BitmapDescriptorFactory.fromBitmap(bpbit);
+
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
                 desc.setText("Starting " + numplayer + " Players game" +
                         "\n開始" + numplayer + "人遊戲" + "\n\n Initializing map 地圖初始中");
 
@@ -147,20 +181,100 @@ public class result extends AppCompatActivity {
                     @Override
                     public void run() {
                         player_seq = getRandomNonRepeatingIntegers(numplayer);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
                         if (numplayer == 2){
                             desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
                                     player_seq.get(1));
+
+                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
+                            p1_mark.setIcon(redp_icon);
+                            p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
+                            p2_mark.setIcon(yellowp_icon);
                         }
                         else if(numplayer == 3){
                             desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
                                     player_seq.get(1) +" "+ player_seq.get(2));
+
+                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
+                            p1_mark.setIcon(redp_icon);
+                            p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
+                            p2_mark.setIcon(yellowp_icon);
+                            p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
+                            p3_mark.setIcon(greenp_icon);
                         }
                         else if (numplayer == 4){
                             desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
                                     player_seq.get(1) +" "+ player_seq.get(2) +" "+ player_seq.get(3));
+
+                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
+                            p1_mark.setIcon(redp_icon);
+                            p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
+                            p2_mark.setIcon(yellowp_icon);
+                            p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
+                            p3_mark.setIcon(greenp_icon);
+                            p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 4"));
+                            p4_mark.setIcon(bluep_icon);
                         }
                     }
                 }, 10000);
+
+                final Handler moneyinit = new Handler(Looper.getMainLooper());
+                Handler loadmoney= new Handler();
+                moneyinit.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (numplayer == 2){
+                            for (int in=0; in <= player_init_money;in++) {
+                                int finalIn = in;
+                                loadmoney.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        desc.setText("Initial player money:\n" + "初始玩家錢:\n"
+                                        + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn);
+                                    }
+                                }, 5L * in);
+                            }
+                            player_money[0] = player_init_money;
+                            player_money[1] = player_init_money;
+                        }
+                        else if(numplayer == 3){
+                            for (int in=0; in <= player_init_money;in++) {
+                                int finalIn = in;
+                                loadmoney.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        desc.setText("Initial player money:\n" + "初始玩家錢:\n"
+                                                + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
+                                                + "\nPlayer 3: $" + finalIn);
+                                    }
+                                }, 5L * in);
+                            }
+                            player_money[0] = player_init_money;
+                            player_money[1] = player_init_money;
+                            player_money[2] = player_init_money;
+                        }
+                        else if (numplayer == 4){
+                            for (int in=0; in <= player_init_money;in++) {
+                                int finalIn = in;
+                                loadmoney.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        desc.setText("Initial player money:\n" + "初始玩家錢:\n"
+                                                + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
+                                                + "\nPlayer 3: $" + finalIn + "\nPlayer 4: $" + finalIn);
+                                    }
+                                }, 5L * in);
+                            }
+                            player_money[0] = player_init_money;
+                            player_money[1] = player_init_money;
+                            player_money[2] = player_init_money;
+                            player_money[3] = player_init_money;
+
+
+                        }
+                    }
+                }, 13000);
             }
         });
     }
