@@ -69,7 +69,10 @@ public class result extends AppCompatActivity {
             120.60659002175329, 121.16318071503659, 121.55594191188305, 121.77566847039398};
 
     static final String[] cities_name = {"Keelung", "Taipei", "Taoyuan", "Hsinchu", "Miaoli", "Taichung",
-    "Taichung", "Yunlin", "Chiayi", "Tainan", "Kaohsiung", "Pingtung", "Taitung", "Hualien", "Yilan"};
+    "Changhua", "Yunlin", "Chiayi", "Tainan", "Kaohsiung", "Pingtung", "Taitung", "Hualien", "Yilan"};
+
+    static final String[] cities_name_ch = {"基隆", "臺北", "桃園", "新竹", "苗慄", "臺中",
+            "彰化", "雲林", "嘉義", "臺南", "高雄", "屏東", "臺東", "花蓮", "宜蘭"};
 
     PolylineOptions polylineOptions = new PolylineOptions();
 
@@ -327,7 +330,7 @@ public class result extends AppCompatActivity {
                                );
                                roll.setVisibility(View.VISIBLE);
 
-                            //Toast.makeText(getApplicationContext(), String.valueOf(), Toast.LENGTH_SHORT).show();
+
 
                             roll.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -378,8 +381,9 @@ public class result extends AppCompatActivity {
                                       }, 1000L * in);
 
                                    }
+                                            Toast.makeText(getApplicationContext(), "Player " + player_seq.get(player_now - 1) + " On the way to " + cities_name[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15]
+                                                    + "\n玩家" + player_seq.get(player_now - 1) + "在路上往" + cities_name_ch[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15], Toast.LENGTH_LONG).show();
                                             player_position[player_seq.get(player_now-1)-1] = player_position[player_seq.get(player_now-1)-1] + dicenum;
-
                                         }
                                     }, 2000);
 
@@ -389,6 +393,7 @@ public class result extends AppCompatActivity {
                                     en_button.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+
                                     roll.setVisibility(View.VISIBLE);
                                         }
                                     }, 2000);
