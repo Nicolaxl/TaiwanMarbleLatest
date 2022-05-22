@@ -53,7 +53,9 @@ public class result extends AppCompatActivity {
 
     Button ok, roll, cancel;
 
-    boolean atInit = false;
+    int dicenum = 0;
+
+    boolean atInit = false, wintrue = false;
 
     static final LatLng CENTRALTW = new LatLng(23.69781, 120.960515);
     static final double[] pointX ={25.135389052877766, 25.039892147214466, 24.994926665365817,
@@ -73,7 +75,7 @@ public class result extends AppCompatActivity {
 
     List<LatLng> loc_coor = new ArrayList<LatLng>();
 
-    int now;
+    int player_now = 0;
 
     ArrayList<Integer> player_seq;
     int[] player_money = new int[4];
@@ -95,6 +97,7 @@ public class result extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_result);
 
         ok = (Button)findViewById(R.id.button_buy);
@@ -126,20 +129,18 @@ public class result extends AppCompatActivity {
         assert supportMapFragment != null;
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
 
-            public int roll(){
+            public void roll(){
                 roll.setVisibility(View.INVISIBLE);
-                final int[] dicenum = new int[1];
                 Handler rollhandler = new Handler();
                 for (int r = 1; r <= 150; r++){
                     rollhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dicenum[0] = new Random().nextInt(5) + 1;
-                            desc.setText(String.valueOf(dicenum[0]));
+                            dicenum = new Random().nextInt(5) + 1;
+                            desc.setText(String.valueOf(dicenum));
                         }
                     }, 10L * r);
                 }
-                return dicenum[0];
             }
 
 
@@ -259,6 +260,9 @@ public class result extends AppCompatActivity {
                 moneyinit.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        for(int pos = 0; pos < numplayer; pos++){
+                            player_position[pos] = 0;
+                        }
                         if (numplayer == 2){
                             for (int in=0; in <= player_init_money;in++) {
                                 int finalIn = in;
@@ -310,35 +314,95 @@ public class result extends AppCompatActivity {
                 }, 13000);
 
 
-                final Handler OnGameRun = new Handler(Looper.getMainLooper());
-                Handler playertest = new Handler();
 
-                OnGameRun.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        roll.setVisibility(View.VISIBLE);
-                        roll.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                roll();
-                                roll.setVisibility(View.VISIBLE);
-                                /*for (int in=0; in < 15;in++) {
-                                    int finalIn = in;
-                                    playertest.postDelayed(new Runnable() {
+
+                    final Handler OnGameRun = new Handler(Looper.getMainLooper());
+                    Handler playertest = new Handler();
+
+                    OnGameRun.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                               desc.setText("It's player " + player_seq.get(player_now) +" turn!"
+                               );
+                               roll.setVisibility(View.VISIBLE);
+
+                            //Toast.makeText(getApplicationContext(), String.valueOf(), Toast.LENGTH_SHORT).show();
+
+                            roll.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if(player_now >= numplayer){
+                                        player_now = 0;
+                                    }
+                                    // player_now - 1
+
+                                    roll();
+
+                                    final Handler waitdice = new Handler(Looper.getMainLooper());
+                                    waitdice.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));
-                                            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-                                            p1_mark.remove();
-                                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 1"));
-                                            p1_mark.setIcon(redp_icon);
+
+
+
+                                  for (int in = player_position[player_seq.get(player_now-1)-1]; in <= player_position[player_seq.get(player_now-1)-1] + dicenum; in++) {
+                                    int finalIn = (in) % 15;
+                                     playertest.postDelayed(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));
+                                              mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                                              if(player_seq.get(player_now-1) == 1){
+                                                  p1_mark.remove();
+                                                  p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 1"));
+                                                  p1_mark.setIcon(redp_icon);
+                                              }
+                                              else if(player_seq.get(player_now-1) == 2){
+                                                  p2_mark.remove();
+                                                  p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 2"));
+                                                  p2_mark.setIcon(yellowp_icon);
+                                              }
+                                              else if(player_seq.get(player_now-1) == 3){
+                                                  p3_mark.remove();
+                                                  p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 3"));
+                                                  p3_mark.setIcon(greenp_icon);
+                                              }
+                                              else if(player_seq.get(player_now-1) == 4){
+                                                  p4_mark.remove();
+                                                  p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 4"));
+                                                  p4_mark.setIcon(bluep_icon);
+                                              }
+                                          }
+
+                                      }, 1000L * in);
+
+                                   }
+                                            player_position[player_seq.get(player_now-1)-1] = player_position[player_seq.get(player_now-1)-1] + dicenum;
+
                                         }
-                                    }, 1000L * in);
-                                }*/
-                            }
-                        });
-                    }
-                }, 20000);
+                                    }, 2000);
+
+
+
+                                    final Handler en_button = new Handler(Looper.getMainLooper());
+                                    en_button.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                    roll.setVisibility(View.VISIBLE);
+                                        }
+                                    }, 2000);
+
+                                    player_now++;
+                                }
+                            });
+
+                        }
+                    }, 20000);
+
+
+
+
             }
         });
     }
