@@ -22,9 +22,9 @@
         android:layout_weight="1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_desc"
             android:layout_width="match_parent"
-            android:layout_height="250sp"
-            >
+            android:layout_height="250sp">
 
             <TextView
                 android:id="@+id/desc"
@@ -37,9 +37,53 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/layout_desc"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" >
+
+            <Button
+                android:id="@+id/button_buy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OK"
+                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="@+id/layout_button"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="25dp"/>
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="@+id/layout_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="25dp"/>
+
+            <Button
+                android:id="@+id/button_roll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Roll"
+                android:textAlignment="center"
+                app:layout_constraintTop_toTopOf="@+id/layout_button"
+                app:layout_constraintStart_toEndOf="@id/button_buy"
+                app:layout_constraintEnd_toStartOf="@id/button_cancel"
+                android:layout_marginTop="25dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </RelativeLayout>
-
-
-
 </LinearLayout>

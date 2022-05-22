@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,7 +50,11 @@ public class result extends AppCompatActivity {
     Marker p1_mark, p2_mark, p3_mark, p4_mark;
 
     MediaPlayer SGame;
+
+    Button ok, roll, cancel;
+
     boolean atInit = false;
+
     static final LatLng CENTRALTW = new LatLng(23.69781, 120.960515);
     static final double[] pointX ={25.135389052877766, 25.039892147214466, 24.994926665365817,
             24.835541700441734, 24.568817202678524, 24.150687238149203, 24.018558941060665,
@@ -92,6 +97,15 @@ public class result extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        ok = (Button)findViewById(R.id.button_buy);
+        roll = (Button)findViewById(R.id.button_roll);
+        cancel = (Button)findViewById(R.id.button_cancel);
+
+        ok.setVisibility(View.INVISIBLE);
+        roll.setVisibility(View.INVISIBLE);
+        cancel.setVisibility(View.INVISIBLE);
+
+
         TextView desc = (TextView)findViewById(R.id.desc);
 
 
@@ -107,11 +121,32 @@ public class result extends AppCompatActivity {
         SGame.start();
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.maps);
 
+
+
         assert supportMapFragment != null;
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+
+            public int roll(){
+                roll.setVisibility(View.INVISIBLE);
+                final int[] dicenum = new int[1];
+                Handler rollhandler = new Handler();
+                for (int r = 1; r <= 150; r++){
+                    rollhandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dicenum[0] = new Random().nextInt(5) + 1;
+                            desc.setText(String.valueOf(dicenum[0]));
+                        }
+                    }, 10L * r);
+                }
+                return dicenum[0];
+            }
+
+
             @SuppressLint("SetTextI18n")
             @Override
             public void onMapReady(@NonNull GoogleMap mMap) {
+
                 Bitmap rp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.player_red);
                 Bitmap rpbit = Bitmap.createScaledBitmap(rp, icon_width, icon_height, false);
                 BitmapDescriptor redp_icon = BitmapDescriptorFactory.fromBitmap(rpbit);
@@ -270,14 +305,46 @@ public class result extends AppCompatActivity {
                             player_money[1] = player_init_money;
                             player_money[2] = player_init_money;
                             player_money[3] = player_init_money;
-
-
                         }
                     }
                 }, 13000);
+
+
+                final Handler OnGameRun = new Handler(Looper.getMainLooper());
+                Handler playertest = new Handler();
+
+                OnGameRun.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        roll.setVisibility(View.VISIBLE);
+                        roll.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                roll();
+                                roll.setVisibility(View.VISIBLE);
+                                /*for (int in=0; in < 15;in++) {
+                                    int finalIn = in;
+                                    playertest.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));
+                                            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                                            p1_mark.remove();
+                                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 1"));
+                                            p1_mark.setIcon(redp_icon);
+                                        }
+                                    }, 1000L * in);
+                                }*/
+                            }
+                        });
+                    }
+                }, 20000);
             }
         });
     }
+
+
+
 
     @Override
     protected void onPause() {
