@@ -49,6 +49,11 @@ public class result extends AppCompatActivity {
 
     Marker p1_mark, p2_mark, p3_mark, p4_mark;
 
+    List<Marker> p1_build = new ArrayList<Marker>();
+    List<Marker> p2_build = new ArrayList<Marker>();
+    List<Marker> p3_build = new ArrayList<Marker>();
+    List<Marker> p4_build = new ArrayList<Marker>();
+
     MediaPlayer SGame;
 
     Button ok, roll, cancel;
@@ -100,6 +105,10 @@ public class result extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        for (int i = 0; i < 15;i++){
+            place_occ[i][0] = -1;
+        }
 
         setContentView(R.layout.activity_result);
 
@@ -166,6 +175,38 @@ public class result extends AppCompatActivity {
                 Bitmap bp = BitmapFactory.decodeResource(getResources(),R.drawable.player_blue);
                 Bitmap bpbit = Bitmap.createScaledBitmap(bp, icon_width, icon_height, false);
                 BitmapDescriptor bluep_icon = BitmapDescriptorFactory.fromBitmap(bpbit);
+
+                Bitmap rb1p = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.build1_red);
+                Bitmap rp1bbit = Bitmap.createScaledBitmap(rb1p, icon_width, icon_height, false);
+                BitmapDescriptor redp_b1 = BitmapDescriptorFactory.fromBitmap(rp1bbit);
+
+                Bitmap yb1p = BitmapFactory.decodeResource(getResources(),R.drawable.build1_yellow);
+                Bitmap yp1bbit = Bitmap.createScaledBitmap(yb1p, icon_width, icon_height, false);
+                BitmapDescriptor yellowp_b1 = BitmapDescriptorFactory.fromBitmap(yp1bbit);
+
+                Bitmap gb1p = BitmapFactory.decodeResource(getResources(),R.drawable.build1_green);
+                Bitmap gp1bbit = Bitmap.createScaledBitmap(gb1p, icon_width, icon_height, false);
+                BitmapDescriptor greenp_b1 = BitmapDescriptorFactory.fromBitmap(gp1bbit);
+
+                Bitmap bb1p = BitmapFactory.decodeResource(getResources(),R.drawable.build1_blue);
+                Bitmap bpb1bit = Bitmap.createScaledBitmap(bb1p, icon_width, icon_height, false);
+                BitmapDescriptor bluep_b1 = BitmapDescriptorFactory.fromBitmap(bpb1bit);
+
+                Bitmap rb2p = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.build2_red);
+                Bitmap rp2bbit = Bitmap.createScaledBitmap(rb2p, icon_width, icon_height, false);
+                BitmapDescriptor redp_b2 = BitmapDescriptorFactory.fromBitmap(rp2bbit);
+
+                Bitmap yb2p = BitmapFactory.decodeResource(getResources(),R.drawable.build2_yellow);
+                Bitmap yp2bbit = Bitmap.createScaledBitmap(yb2p, icon_width, icon_height, false);
+                BitmapDescriptor yellowp_b2 = BitmapDescriptorFactory.fromBitmap(yp2bbit);
+
+                Bitmap gb2p = BitmapFactory.decodeResource(getResources(),R.drawable.build2_green);
+                Bitmap gp2bbit = Bitmap.createScaledBitmap(gb2p, icon_width, icon_height, false);
+                BitmapDescriptor greenp_b2 = BitmapDescriptorFactory.fromBitmap(gp2bbit);
+
+                Bitmap bb2p = BitmapFactory.decodeResource(getResources(),R.drawable.build2_blue);
+                Bitmap bpb2bit = Bitmap.createScaledBitmap(bb2p, icon_width, icon_height, false);
+                BitmapDescriptor bluep_b2 = BitmapDescriptorFactory.fromBitmap(bpb2bit);
 
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
@@ -387,16 +428,49 @@ public class result extends AppCompatActivity {
                                         }
                                     }, 2000);
 
+                                    final Handler autobuy = new Handler(Looper.getMainLooper());
+                                    autobuy.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if(place_occ[player_position[player_seq.get(player_now-1)-1]][0] == -1){
+                                                if(player_seq.get(player_now-1) == 1){
+                                                    p1_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
+                                                    p1_build.get(p1_build.size()-1).setIcon(redp_b1);
+                                                }
+                                                else if(player_seq.get(player_now-1) == 2){
+                                                    p2_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
+                                                    p2_build.get(p2_build.size()-1).setIcon(yellowp_b1);
+                                                }
+                                                else if(player_seq.get(player_now-1) == 3){
+                                                    p3_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
+                                                    p3_build.get(p3_build.size()-1).setIcon(greenp_b1);
+                                                }
+                                                else if(player_seq.get(player_now-1) == 4){
+                                                    p4_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
+                                                    p4_build.get(p4_build.size()-1).setIcon(bluep_b1);
+                                                }
+                                                place_occ[player_position[player_seq.get(player_now-1)-1]][0] = 1;
+                                                place_occ[player_position[player_seq.get(player_now-1)-1]][1] = player_seq.get(player_now-1);
+                                            }
+
+                                        }
+                                    }, 5000);
 
 
                                     final Handler en_button = new Handler(Looper.getMainLooper());
                                     en_button.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+                                                int copy = player_now-1;
+                                                copy++;
+                                                if(copy > 3){
+                                                    copy = 0;
+                                                }
+                                                desc.setText("It's player " + player_seq.get(copy) +" turn!");
+                                                roll.setVisibility(View.VISIBLE);
 
-                                    roll.setVisibility(View.VISIBLE);
                                         }
-                                    }, 2000);
+                                    }, 1000);
 
                                     player_now++;
                                 }
