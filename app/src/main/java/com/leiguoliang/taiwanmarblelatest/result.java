@@ -148,7 +148,7 @@ public class result extends AppCompatActivity {
                     rollhandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dicenum = new Random().nextInt(5) + 1;
+                            dicenum = new Random().nextInt(6) + 1;
                             desc.setText(String.valueOf(dicenum));
                         }
                     }, 10L * r);
@@ -316,7 +316,7 @@ public class result extends AppCompatActivity {
                                         desc.setText("Initial player money:\n" + "初始玩家錢:\n"
                                         + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn);
                                     }
-                                }, 5L * in);
+                                }, (long) in);
                             }
                             player_money[0] = player_init_money;
                             player_money[1] = player_init_money;
@@ -331,7 +331,7 @@ public class result extends AppCompatActivity {
                                                 + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
                                                 + "\nPlayer 3: $" + finalIn);
                                     }
-                                }, 5L * in);
+                                }, (long) in);
                             }
                             player_money[0] = player_init_money;
                             player_money[1] = player_init_money;
@@ -347,7 +347,7 @@ public class result extends AppCompatActivity {
                                                 + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
                                                 + "\nPlayer 3: $" + finalIn + "\nPlayer 4: $" + finalIn);
                                     }
-                                }, 5L * in);
+                                }, (long) in);
                             }
                             player_money[0] = player_init_money;
                             player_money[1] = player_init_money;
@@ -390,7 +390,7 @@ public class result extends AppCompatActivity {
 
 
 
-                                  for (int in = player_position[player_seq.get(player_now-1)-1]; in <= player_position[player_seq.get(player_now-1)-1] + dicenum; in++) {
+                                  for (int in = player_position[player_seq.get(player_now-1)-1] ; in <= player_position[player_seq.get(player_now-1)-1] + dicenum; in++) {
                                     int finalIn = (in) % 15;
                                      playertest.postDelayed(new Runnable() {
                                           @Override
@@ -432,27 +432,90 @@ public class result extends AppCompatActivity {
                                     autobuy.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            if(place_occ[player_position[player_seq.get(player_now-1)-1]][0] == -1){
-                                                if(player_seq.get(player_now-1) == 1){
-                                                    p1_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
-                                                    p1_build.get(p1_build.size()-1).setIcon(redp_b1);
+                                            if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == -1){
+                                                if(player_seq.get(player_now-1) == 1) {
+                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
+                                                    }
+                                                    else{
+                                                        p1_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 1 Building")));
+                                                        p1_build.get(p1_build.size() - 1).setIcon(redp_b1);
+
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                                    }
                                                 }
                                                 else if(player_seq.get(player_now-1) == 2){
-                                                    p2_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
-                                                    p2_build.get(p2_build.size()-1).setIcon(yellowp_b1);
+                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
+                                                    }
+                                                    else{
+                                                        p2_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
+                                                        p2_build.get(p2_build.size()-1).setIcon(yellowp_b1);
+
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                                    }
+
                                                 }
                                                 else if(player_seq.get(player_now-1) == 3){
-                                                    p3_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
-                                                    p3_build.get(p3_build.size()-1).setIcon(greenp_b1);
+                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
+                                                    }
+                                                    else{
+                                                        p3_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
+                                                        p3_build.get(p3_build.size()-1).setIcon(greenp_b1);
+
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                                    }
                                                 }
                                                 else if(player_seq.get(player_now-1) == 4){
-                                                    p4_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1])).title("Player 1 Building")));
-                                                    p4_build.get(p4_build.size()-1).setIcon(bluep_b1);
-                                                }
-                                                place_occ[player_position[player_seq.get(player_now-1)-1]][0] = 1;
-                                                place_occ[player_position[player_seq.get(player_now-1)-1]][1] = player_seq.get(player_now-1);
-                                            }
+                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
+                                                    }
+                                                    else{
+                                                        p4_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 4 Building")));
+                                                        p4_build.get(p4_build.size()-1).setIcon(bluep_b1);
 
+                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                                    }
+                                                }
+                                            }
+                                            //continue deduct system here
                                         }
                                     }, 5000);
 
@@ -463,14 +526,14 @@ public class result extends AppCompatActivity {
                                         public void run() {
                                                 int copy = player_now-1;
                                                 copy++;
-                                                if(copy > 3){
+                                                if(copy > player_now-1){
                                                     copy = 0;
                                                 }
                                                 desc.setText("It's player " + player_seq.get(copy) +" turn!");
                                                 roll.setVisibility(View.VISIBLE);
 
                                         }
-                                    }, 1000);
+                                    }, 10000);
 
                                     player_now++;
                                 }
