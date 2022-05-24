@@ -60,6 +60,8 @@ public class result extends AppCompatActivity {
 
     int dicenum = 0;
 
+    int numplayer = 0;
+
     boolean atInit = false, wintrue = false;
 
     static final LatLng CENTRALTW = new LatLng(23.69781, 120.960515);
@@ -89,6 +91,7 @@ public class result extends AppCompatActivity {
     int[] player_money = new int[4];
     int[] player_position = new int[4];
     int[][] place_occ = new int[15][2];
+    int[] rank = {1,2,3,4};
 
     public static ArrayList<Integer> getRandomNonRepeatingIntegers(int size) {
         ArrayList<Integer> numbers = new ArrayList<Integer>();
@@ -129,7 +132,8 @@ public class result extends AppCompatActivity {
         };
 
         Intent intent = getIntent();
-        int numplayer = Integer.parseInt(intent.getStringExtra(MainActivity.FINAL_PLAYER));
+
+        numplayer = Integer.parseInt(intent.getStringExtra(MainActivity.FINAL_PLAYER));
 
         SGame = MediaPlayer.create(getApplicationContext(), R.raw.apcey);
         SGame.setLooping(true);
@@ -418,7 +422,6 @@ public class result extends AppCompatActivity {
                                                   p4_mark.setIcon(bluep_icon);
                                               }
                                           }
-
                                       }, 1000L * in);
 
                                    }
@@ -432,6 +435,7 @@ public class result extends AppCompatActivity {
                                     autobuy.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+
                                             if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == -1){
                                                 if(player_seq.get(player_now-1) == 1) {
                                                     if(player_money[player_seq.get(player_now-1)-1] < 100){
@@ -515,7 +519,43 @@ public class result extends AppCompatActivity {
                                                     }
                                                 }
                                             }
-                                            //continue deduct system here
+                                            else if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == 1){
+                                                if(player_seq.get(player_now-1) == place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]) {
+                                                    //desc.setText("Player 玩家 " + player_seq.get(player_now-1) +"\n visit own place 參觀自己的地方! \n +$100");
+                                                    //player_money[player_seq.get(player_now-1)-1] += 100;
+                                                }
+                                                else{
+                                                    desc.setText("Player 玩家 " + player_seq.get(player_now-1) + " Trespass侵入 \n Player 玩家" + place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]
+                                                    + " Place 地方!\nPlayer 玩家" + player_seq.get(player_now-1) +":　-$100 \n Player 玩家"
+                                                    + place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] + ": +$100");
+                                                    player_money[player_seq.get(player_now-1)-1] -= 100;
+                                                    player_money[place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]-1] += 100;
+
+                                                    if(player_money[player_seq.get(player_now-1)-1] < 0){
+
+                                                        desc.setText("Player 玩家" +player_seq.get(player_now-1) + " Bankrupt 破產!\n Game ended 遊戲結束! \n Player 玩家"
+                                                                + rank[0] + " wins 贏!");
+                                                        wintrue = true;
+
+                                                        int n = numplayer;
+                                                        int temp = 0, temp2 = 0;
+                                                        for(int i=0; i < n; i++) {
+                                                            for (int j = 1; j < (n - i); j++) {
+                                                                if (player_money[j - 1] > player_money[j]) {
+                                                                    temp = player_money[j - 1];
+                                                                    temp2 = rank[j-1];
+                                                                    player_money[j - 1] = player_money[j];
+                                                                    rank[j-1] = rank[j];
+                                                                    player_money[j] = temp;
+                                                                    rank[j] = temp2;
+                                                                }
+
+                                                            }
+                                                        }
+                                                        SGame.stop();
+                                                    }
+                                                }
+                                            }
                                         }
                                     }, 5000);
 
@@ -524,17 +564,17 @@ public class result extends AppCompatActivity {
                                     en_button.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
+                                            if(!wintrue){
                                                 int copy = player_now-1;
                                                 copy++;
-                                                if(copy > player_now-1){
+                                                if(copy > numplayer-1){
                                                     copy = 0;
                                                 }
                                                 desc.setText("It's player " + player_seq.get(copy) +" turn!");
                                                 roll.setVisibility(View.VISIBLE);
-
+                                            }
                                         }
                                     }, 10000);
-
                                     player_now++;
                                 }
                             });
