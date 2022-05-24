@@ -1,21 +1,14 @@
 package com.leiguoliang.taiwanmarblelatest;
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,15 +24,15 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static android.content.ContentValues.TAG;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class result extends AppCompatActivity {
@@ -49,10 +42,10 @@ public class result extends AppCompatActivity {
 
     Marker p1_mark, p2_mark, p3_mark, p4_mark;
 
-    List<Marker> p1_build = new ArrayList<Marker>();
-    List<Marker> p2_build = new ArrayList<Marker>();
-    List<Marker> p3_build = new ArrayList<Marker>();
-    List<Marker> p4_build = new ArrayList<Marker>();
+    List<Marker> p1_build = new ArrayList<>();
+    List<Marker> p2_build = new ArrayList<>();
+    List<Marker> p3_build = new ArrayList<>();
+    List<Marker> p4_build = new ArrayList<>();
 
     MediaPlayer SGame;
 
@@ -62,7 +55,7 @@ public class result extends AppCompatActivity {
 
     int numplayer = 0;
 
-    boolean atInit = false, wintrue = false;
+    boolean wintrue = false;
 
     static final LatLng CENTRALTW = new LatLng(23.69781, 120.960515);
     static final double[] pointX ={25.135389052877766, 25.039892147214466, 24.994926665365817,
@@ -83,7 +76,7 @@ public class result extends AppCompatActivity {
 
     PolylineOptions polylineOptions = new PolylineOptions();
 
-    List<LatLng> loc_coor = new ArrayList<LatLng>();
+    List<LatLng> loc_coor = new ArrayList<>();
 
     int player_now = 0;
 
@@ -94,7 +87,7 @@ public class result extends AppCompatActivity {
     int[] rank = {1,2,3,4};
 
     public static ArrayList<Integer> getRandomNonRepeatingIntegers(int size) {
-        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        ArrayList<Integer> numbers = new ArrayList<>();
         Random random = new Random();
         while (numbers.size() < size) {
             int randomNumber = random.nextInt((size - 1) + 1) + 1;
@@ -129,7 +122,7 @@ public class result extends AppCompatActivity {
 
         for (int i = 0 ; i < pointX.length; i++){
             loc_coor.add(new LatLng(pointX[i],pointY[i]));
-        };
+        }
 
         Intent intent = getIntent();
 
@@ -149,12 +142,9 @@ public class result extends AppCompatActivity {
                 roll.setVisibility(View.INVISIBLE);
                 Handler rollhandler = new Handler();
                 for (int r = 1; r <= 150; r++){
-                    rollhandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            dicenum = new Random().nextInt(6) + 1;
-                            desc.setText(String.valueOf(dicenum));
-                        }
+                    rollhandler.postDelayed(() -> {
+                        dicenum = new Random().nextInt(6) + 1;
+                        desc.setText(String.valueOf(dicenum));
                     }, 10L * r);
                 }
             }
@@ -223,141 +213,119 @@ public class result extends AppCompatActivity {
                 Handler myHandler = new Handler();
                 for (int in=0; in <=pointX.length;in++) {
                     final int[] finalIn = {in};
-                    myHandler.postDelayed(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (finalIn[0] == pointX.length){
-                                finalIn[0] = 0;
-                            }
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn[0])));
-                            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-                            polylineOptions.add(loc_coor.get(finalIn[0]));
-                            mMap.addPolyline(polylineOptions);
+                    myHandler.postDelayed(() -> {
+                        if (finalIn[0] == pointX.length){
+                            finalIn[0] = 0;
                         }
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn[0])));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                        polylineOptions.add(loc_coor.get(finalIn[0]));
+                        mMap.addPolyline(polylineOptions);
                     }, 400L * finalIn[0]);
                 }
 
                 final Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        final CameraPosition posisikamera = new CameraPosition.Builder().target(CENTRALTW).zoom(7).build();
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(posisikamera), 1000, new GoogleMap.CancelableCallback() {
-                            @Override
-                            public void onFinish() {
-                                desc.setText("There are 15 cities \n 總共有15個城市 \n\n Buy them all to win this game!\n全部購買即可贏得遊戲！");
-                            }
+                handler.postDelayed(() -> {
+                    final CameraPosition posisikamera = new CameraPosition.Builder().target(CENTRALTW).zoom(7).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(posisikamera), 1000, new GoogleMap.CancelableCallback() {
+                        @Override
+                        public void onFinish() {
+                            desc.setText("There are 15 cities \n 總共有15個城市 \n\n Buy them all to win this game!\n全部購買即可贏得遊戲！");
+                        }
 
-                            @Override
-                            public void onCancel() {
-                                desc.setText("animateCamera Error！");
-                            }
-                        });
-                    }
+                        @Override
+                        public void onCancel() {
+                            desc.setText("animateCamera Error！");
+                        }
+                    });
                 }, 6500);
 
-                final Boolean[] fdone = {false};
-                final int[] exempt = new int[1];
-
                 final Handler outerhandler = new Handler(Looper.getMainLooper());
-                outerhandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        player_seq = getRandomNonRepeatingIntegers(numplayer);
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
-                        if (numplayer == 2){
-                            desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
-                                    player_seq.get(1));
+                outerhandler.postDelayed(() -> {
+                    player_seq = getRandomNonRepeatingIntegers(numplayer);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+                    if (numplayer == 2){
+                        desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
+                                player_seq.get(1));
 
-                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
-                            p1_mark.setIcon(redp_icon);
-                            p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
-                            p2_mark.setIcon(yellowp_icon);
-                        }
-                        else if(numplayer == 3){
-                            desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
-                                    player_seq.get(1) +" "+ player_seq.get(2));
+                        p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
+                        assert p1_mark != null;
+                        p1_mark.setIcon(redp_icon);
+                        p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
+                        assert p2_mark != null;
+                        p2_mark.setIcon(yellowp_icon);
+                    }
+                    else if(numplayer == 3){
+                        desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
+                                player_seq.get(1) +" "+ player_seq.get(2));
 
-                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
-                            p1_mark.setIcon(redp_icon);
-                            p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
-                            p2_mark.setIcon(yellowp_icon);
-                            p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
-                            p3_mark.setIcon(greenp_icon);
-                        }
-                        else if (numplayer == 4){
-                            desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
-                                    player_seq.get(1) +" "+ player_seq.get(2) +" "+ player_seq.get(3));
+                        p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
+                        assert p1_mark != null;
+                        p1_mark.setIcon(redp_icon);
+                        p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
+                        assert p2_mark != null;
+                        p2_mark.setIcon(yellowp_icon);
+                        p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
+                        assert p3_mark != null;
+                        p3_mark.setIcon(greenp_icon);
+                    }
+                    else if (numplayer == 4){
+                        desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
+                                player_seq.get(1) +" "+ player_seq.get(2) +" "+ player_seq.get(3));
 
-                            p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
-                            p1_mark.setIcon(redp_icon);
-                            p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
-                            p2_mark.setIcon(yellowp_icon);
-                            p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
-                            p3_mark.setIcon(greenp_icon);
-                            p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 4"));
-                            p4_mark.setIcon(bluep_icon);
-                        }
+                        p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
+                        assert p1_mark != null;
+                        p1_mark.setIcon(redp_icon);
+                        p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
+                        assert p2_mark != null;
+                        p2_mark.setIcon(yellowp_icon);
+                        p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
+                        assert p3_mark != null;
+                        p3_mark.setIcon(greenp_icon);
+                        p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 4"));
+                        assert p4_mark != null;
+                        p4_mark.setIcon(bluep_icon);
                     }
                 }, 10000);
 
                 final Handler moneyinit = new Handler(Looper.getMainLooper());
                 Handler loadmoney= new Handler();
-                moneyinit.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for(int pos = 0; pos < numplayer; pos++){
-                            player_position[pos] = 0;
+                moneyinit.postDelayed(() -> {
+                    for(int pos = 0; pos < numplayer; pos++){
+                        player_position[pos] = 0;
+                    }
+                    if (numplayer == 2){
+                        for (int in=0; in <= player_init_money;in++) {
+                            int finalIn = in;
+                            loadmoney.postDelayed(() -> desc.setText("Initial player money:\n" + "初始玩家錢:\n"
+                            + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn), (long) in);
                         }
-                        if (numplayer == 2){
-                            for (int in=0; in <= player_init_money;in++) {
-                                int finalIn = in;
-                                loadmoney.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        desc.setText("Initial player money:\n" + "初始玩家錢:\n"
-                                        + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn);
-                                    }
-                                }, (long) in);
-                            }
-                            player_money[0] = player_init_money;
-                            player_money[1] = player_init_money;
+                        player_money[0] = player_init_money;
+                        player_money[1] = player_init_money;
+                    }
+                    else if(numplayer == 3){
+                        for (int in=0; in <= player_init_money;in++) {
+                            int finalIn = in;
+                            loadmoney.postDelayed(() -> desc.setText("Initial player money:\n" + "初始玩家錢:\n"
+                                    + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
+                                    + "\nPlayer 3: $" + finalIn), (long) in);
                         }
-                        else if(numplayer == 3){
-                            for (int in=0; in <= player_init_money;in++) {
-                                int finalIn = in;
-                                loadmoney.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        desc.setText("Initial player money:\n" + "初始玩家錢:\n"
-                                                + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
-                                                + "\nPlayer 3: $" + finalIn);
-                                    }
-                                }, (long) in);
-                            }
-                            player_money[0] = player_init_money;
-                            player_money[1] = player_init_money;
-                            player_money[2] = player_init_money;
+                        player_money[0] = player_init_money;
+                        player_money[1] = player_init_money;
+                        player_money[2] = player_init_money;
+                    }
+                    else if (numplayer == 4){
+                        for (int in=0; in <= player_init_money;in++) {
+                            int finalIn = in;
+                            loadmoney.postDelayed(() -> desc.setText("Initial player money:\n" + "初始玩家錢:\n"
+                                    + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
+                                    + "\nPlayer 3: $" + finalIn + "\nPlayer 4: $" + finalIn), (long) in);
                         }
-                        else if (numplayer == 4){
-                            for (int in=0; in <= player_init_money;in++) {
-                                int finalIn = in;
-                                loadmoney.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        desc.setText("Initial player money:\n" + "初始玩家錢:\n"
-                                                + "Player 1: $" + finalIn + "\nPlayer 2: $" + finalIn
-                                                + "\nPlayer 3: $" + finalIn + "\nPlayer 4: $" + finalIn);
-                                    }
-                                }, (long) in);
-                            }
-                            player_money[0] = player_init_money;
-                            player_money[1] = player_init_money;
-                            player_money[2] = player_init_money;
-                            player_money[3] = player_init_money;
-                        }
+                        player_money[0] = player_init_money;
+                        player_money[1] = player_init_money;
+                        player_money[2] = player_init_money;
+                        player_money[3] = player_init_money;
                     }
                 }, 13000);
 
@@ -367,219 +335,205 @@ public class result extends AppCompatActivity {
                     final Handler OnGameRun = new Handler(Looper.getMainLooper());
                     Handler playertest = new Handler();
 
-                    OnGameRun.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    OnGameRun.postDelayed(() -> {
 
-                               desc.setText("It's player " + player_seq.get(player_now) +" turn!"
-                               );
-                               roll.setVisibility(View.VISIBLE);
+                           desc.setText("It's player " + player_seq.get(player_now) +" turn!"
+                           );
+                           roll.setVisibility(View.VISIBLE);
 
 
 
-                            roll.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if(player_now >= numplayer){
-                                        player_now = 0;
+                        roll.setOnClickListener(view -> {
+                            if(player_now >= numplayer){
+                                player_now = 0;
+                            }
+                            // player_now - 1
+
+                            roll();
+
+                            final Handler waitdice = new Handler(Looper.getMainLooper());
+                            waitdice.postDelayed(() -> {
+
+
+
+                      for (int in = player_position[player_seq.get(player_now-1)-1] ; in <= player_position[player_seq.get(player_now-1)-1] + dicenum; in++) {
+                        int finalIn = (in) % 15;
+                         playertest.postDelayed(() -> {
+                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));
+                             mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                             if(player_seq.get(player_now-1) == 1){
+                                 p1_mark.remove();
+                                 p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 1"));
+                                 assert p1_mark != null;
+                                 p1_mark.setIcon(redp_icon);
+                             }
+                             else if(player_seq.get(player_now-1) == 2){
+                                 p2_mark.remove();
+                                 p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 2"));
+                                 assert p2_mark != null;
+                                 p2_mark.setIcon(yellowp_icon);
+                             }
+                             else if(player_seq.get(player_now-1) == 3){
+                                 p3_mark.remove();
+                                 p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 3"));
+                                 assert p3_mark != null;
+                                 p3_mark.setIcon(greenp_icon);
+                             }
+                             else if(player_seq.get(player_now-1) == 4){
+                                 p4_mark.remove();
+                                 p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 4"));
+                                 assert p4_mark != null;
+                                 p4_mark.setIcon(bluep_icon);
+                             }
+                         }, 1000L * in);
+
+                       }
+                                Toast.makeText(getApplicationContext(), "Player " + player_seq.get(player_now - 1) + " On the way to " + cities_name[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15]
+                                        + "\n玩家" + player_seq.get(player_now - 1) + "在路上往" + cities_name_ch[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15], Toast.LENGTH_LONG).show();
+                                player_position[player_seq.get(player_now-1)-1] = player_position[player_seq.get(player_now-1)-1] + dicenum;
+                            }, 2000);
+
+                            final Handler autobuy = new Handler(Looper.getMainLooper());
+                            autobuy.postDelayed(() -> {
+
+                                if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == -1){
+                                    if(player_seq.get(player_now-1) == 1) {
+                                        if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                    "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
+                                        }
+                                        else{
+                                            p1_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 1 Building")));
+                                            p1_build.get(p1_build.size() - 1).setIcon(redp_b1);
+
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                    cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                    cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                            player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                        }
                                     }
-                                    // player_now - 1
-
-                                    roll();
-
-                                    final Handler waitdice = new Handler(Looper.getMainLooper());
-                                    waitdice.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-
-
-                                  for (int in = player_position[player_seq.get(player_now-1)-1] ; in <= player_position[player_seq.get(player_now-1)-1] + dicenum; in++) {
-                                    int finalIn = (in) % 15;
-                                     playertest.postDelayed(new Runnable() {
-                                          @Override
-                                          public void run() {
-                                              mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));
-                                              mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-                                              if(player_seq.get(player_now-1) == 1){
-                                                  p1_mark.remove();
-                                                  p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 1"));
-                                                  p1_mark.setIcon(redp_icon);
-                                              }
-                                              else if(player_seq.get(player_now-1) == 2){
-                                                  p2_mark.remove();
-                                                  p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 2"));
-                                                  p2_mark.setIcon(yellowp_icon);
-                                              }
-                                              else if(player_seq.get(player_now-1) == 3){
-                                                  p3_mark.remove();
-                                                  p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 3"));
-                                                  p3_mark.setIcon(greenp_icon);
-                                              }
-                                              else if(player_seq.get(player_now-1) == 4){
-                                                  p4_mark.remove();
-                                                  p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 4"));
-                                                  p4_mark.setIcon(bluep_icon);
-                                              }
-                                          }
-                                      }, 1000L * in);
-
-                                   }
-                                            Toast.makeText(getApplicationContext(), "Player " + player_seq.get(player_now - 1) + " On the way to " + cities_name[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15]
-                                                    + "\n玩家" + player_seq.get(player_now - 1) + "在路上往" + cities_name_ch[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15], Toast.LENGTH_LONG).show();
-                                            player_position[player_seq.get(player_now-1)-1] = player_position[player_seq.get(player_now-1)-1] + dicenum;
+                                    else if(player_seq.get(player_now-1) == 2){
+                                        if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                    "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
                                         }
-                                    }, 2000);
+                                        else{
+                                            p2_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
+                                            p2_build.get(p2_build.size()-1).setIcon(yellowp_b1);
 
-                                    final Handler autobuy = new Handler(Looper.getMainLooper());
-                                    autobuy.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                    cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                    cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                            player_money[player_seq.get(player_now-1)-1] -= 100;
 
-                                            if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == -1){
-                                                if(player_seq.get(player_now-1) == 1) {
-                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
-                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
-                                                    }
-                                                    else{
-                                                        p1_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 1 Building")));
-                                                        p1_build.get(p1_build.size() - 1).setIcon(redp_b1);
-
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
-                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
-                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
-                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
-
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
-                                                    }
-                                                }
-                                                else if(player_seq.get(player_now-1) == 2){
-                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
-                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
-                                                    }
-                                                    else{
-                                                        p2_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
-                                                        p2_build.get(p2_build.size()-1).setIcon(yellowp_b1);
-
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
-                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
-                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
-                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
-
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
-                                                    }
-
-                                                }
-                                                else if(player_seq.get(player_now-1) == 3){
-                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
-                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
-                                                    }
-                                                    else{
-                                                        p3_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
-                                                        p3_build.get(p3_build.size()-1).setIcon(greenp_b1);
-
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
-                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
-                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
-                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
-
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
-                                                    }
-                                                }
-                                                else if(player_seq.get(player_now-1) == 4){
-                                                    if(player_money[player_seq.get(player_now-1)-1] < 100){
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
-                                                                "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
-                                                    }
-                                                    else{
-                                                        p4_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 4 Building")));
-                                                        p4_build.get(p4_build.size()-1).setIcon(bluep_b1);
-
-                                                        desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
-                                                                cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
-                                                                cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
-                                                                "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
-                                                        player_money[player_seq.get(player_now-1)-1] -= 100;
-
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
-                                                        place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
-                                                    }
-                                                }
-                                            }
-                                            else if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == 1){
-                                                if(player_seq.get(player_now-1) == place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]) {
-                                                    //desc.setText("Player 玩家 " + player_seq.get(player_now-1) +"\n visit own place 參觀自己的地方! \n +$100");
-                                                    //player_money[player_seq.get(player_now-1)-1] += 100;
-                                                }
-                                                else{
-                                                    desc.setText("Player 玩家 " + player_seq.get(player_now-1) + " Trespass侵入 \n Player 玩家" + place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]
-                                                    + " Place 地方!\nPlayer 玩家" + player_seq.get(player_now-1) +":　-$100 \n Player 玩家"
-                                                    + place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] + ": +$100");
-                                                    player_money[player_seq.get(player_now-1)-1] -= 100;
-                                                    player_money[place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]-1] += 100;
-
-                                                    if(player_money[player_seq.get(player_now-1)-1] < 0){
-
-                                                        desc.setText("Player 玩家" +player_seq.get(player_now-1) + " Bankrupt 破產!\n Game ended 遊戲結束! \n Player 玩家"
-                                                                + rank[0] + " wins 贏!");
-                                                        wintrue = true;
-
-                                                        int n = numplayer;
-                                                        int temp = 0, temp2 = 0;
-                                                        for(int i=0; i < n; i++) {
-                                                            for (int j = 1; j < (n - i); j++) {
-                                                                if (player_money[j - 1] > player_money[j]) {
-                                                                    temp = player_money[j - 1];
-                                                                    temp2 = rank[j-1];
-                                                                    player_money[j - 1] = player_money[j];
-                                                                    rank[j-1] = rank[j];
-                                                                    player_money[j] = temp;
-                                                                    rank[j] = temp2;
-                                                                }
-
-                                                            }
-                                                        }
-                                                        SGame.stop();
-                                                    }
-                                                }
-                                            }
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
                                         }
-                                    }, 5000);
 
-
-                                    final Handler en_button = new Handler(Looper.getMainLooper());
-                                    en_button.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if(!wintrue){
-                                                int copy = player_now-1;
-                                                copy++;
-                                                if(copy > numplayer-1){
-                                                    copy = 0;
-                                                }
-                                                desc.setText("It's player " + player_seq.get(copy) +" turn!");
-                                                roll.setVisibility(View.VISIBLE);
-                                            }
+                                    }
+                                    else if(player_seq.get(player_now-1) == 3){
+                                        if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                    "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
                                         }
-                                    }, 10000);
-                                    player_now++;
+                                        else{
+                                            p3_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
+                                            p3_build.get(p3_build.size()-1).setIcon(greenp_b1);
+
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                    cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                    cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                            player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                        }
+                                    }
+                                    else if(player_seq.get(player_now-1) == 4){
+                                        if(player_money[player_seq.get(player_now-1)-1] < 100){
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " Balance Insufficient, can't buy " + cities_name[player_position[player_seq.get(player_now-1)-1]%15]+
+                                                    "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
+                                        }
+                                        else{
+                                            p4_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 4 Building")));
+                                            p4_build.get(p4_build.size()-1).setIcon(bluep_b1);
+
+                                            desc.setText("Player " + player_seq.get(player_now-1) + " purchased " +
+                                                    cities_name[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "! \n玩家"+ player_seq.get(player_now-1) + "買了" +
+                                                    cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] +
+                                                    "!\nMoney 錢: -100 = $" + (player_money[player_seq.get(player_now-1)-1] - 100));
+                                            player_money[player_seq.get(player_now-1)-1] -= 100;
+
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] = 1;
+                                            place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] = player_seq.get(player_now-1);
+                                        }
+                                    }
                                 }
-                            });
+                                else if(place_occ[player_position[player_seq.get(player_now-1)-1]%15][0] == 1){
+                                    if(player_seq.get(player_now-1) == place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]) {
+                                        //desc.setText("Player 玩家 " + player_seq.get(player_now-1) +"\n visit own place 參觀自己的地方! \n +$100");
+                                        //player_money[player_seq.get(player_now-1)-1] += 100;
+                                    }
+                                    else{
+                                        desc.setText("Player 玩家 " + player_seq.get(player_now-1) + " Trespass侵入 \n Player 玩家" + place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]
+                                        + " Place 地方!\nPlayer 玩家" + player_seq.get(player_now-1) +":　-$100 \n Player 玩家"
+                                        + place_occ[player_position[player_seq.get(player_now-1)-1]%15][1] + ": +$100");
+                                        player_money[player_seq.get(player_now-1)-1] -= 100;
+                                        player_money[place_occ[player_position[player_seq.get(player_now-1)-1]%15][1]-1] += 100;
 
-                        }
+                                        if(player_money[player_seq.get(player_now-1)-1] < 0){
+
+                                            desc.setText("Player 玩家" +player_seq.get(player_now-1) + " Bankrupt 破產!\n Game ended 遊戲結束! \n Player 玩家"
+                                                    + rank[0] + " wins 贏!");
+                                            wintrue = true;
+
+                                            int n = numplayer;
+                                            int temp, temp2;
+                                            for(int i=0; i < n; i++) {
+                                                for (int j = 1; j < (n - i); j++) {
+                                                    if (player_money[j - 1] > player_money[j]) {
+                                                        temp = player_money[j - 1];
+                                                        temp2 = rank[j-1];
+                                                        player_money[j - 1] = player_money[j];
+                                                        rank[j-1] = rank[j];
+                                                        player_money[j] = temp;
+                                                        rank[j] = temp2;
+                                                    }
+
+                                                }
+                                            }
+                                            SGame.stop();
+                                        }
+                                    }
+                                }
+                            }, 5000);
+
+
+                            final Handler en_button = new Handler(Looper.getMainLooper());
+                            en_button.postDelayed(() -> {
+                                if(!wintrue){
+                                    int copy = player_now-1;
+                                    copy++;
+                                    if(copy > numplayer-1){
+                                        copy = 0;
+                                    }
+                                    desc.setText("It's player " + player_seq.get(copy) +" turn!");
+                                    roll.setVisibility(View.VISIBLE);
+                                }
+                            }, 10000);
+                            player_now++;
+                        });
+
                     }, 20000);
 
 
@@ -611,19 +565,13 @@ public class result extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("你想回到主菜單嗎？")
                 .setCancelable(false)
-                .setPositiveButton("Yes 要", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent i = new Intent(result.this, MainActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                        finish();
-                    }
+                .setPositiveButton("Yes 要", (dialog, id) -> {
+                    Intent i = new Intent(result.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
                 })
-                .setNegativeButton("No 不要", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton("No 不要", (dialog, id) -> dialog.cancel());
 
         AlertDialog alert = builder.create();
 
