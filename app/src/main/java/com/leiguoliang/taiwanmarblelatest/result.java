@@ -12,19 +12,19 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Toast; // Lab 7
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.CameraUpdateFactory; // Lab 4
+import com.google.android.gms.maps.GoogleMap; // Lab 3
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory; // Lab 5
+import com.google.android.gms.maps.model.CameraPosition; // Lab 8
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.PolylineOptions; // Lab 6
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +74,7 @@ public class result extends AppCompatActivity {
     static final String[] cities_name_ch = {"基隆", "臺北", "桃園", "新竹", "苗慄", "臺中",
             "彰化", "雲林", "嘉義", "臺南", "高雄", "屏東", "臺東", "花蓮", "宜蘭"};
 
-    PolylineOptions polylineOptions = new PolylineOptions();
+    PolylineOptions polylineOptions = new PolylineOptions(); // Lab 6
 
     List<LatLng> loc_coor = new ArrayList<>();
 
@@ -156,55 +156,56 @@ public class result extends AppCompatActivity {
 
                 Bitmap rp = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.player_red);
                 Bitmap rpbit = Bitmap.createScaledBitmap(rp, icon_width, icon_height, false);
-                BitmapDescriptor redp_icon = BitmapDescriptorFactory.fromBitmap(rpbit);
+                BitmapDescriptor redp_icon = BitmapDescriptorFactory.fromBitmap(rpbit); // Lab 5
 
                 Bitmap yp = BitmapFactory.decodeResource(getResources(),R.drawable.player_yellow);
                 Bitmap ypbit = Bitmap.createScaledBitmap(yp, icon_width, icon_height, false);
-                BitmapDescriptor yellowp_icon = BitmapDescriptorFactory.fromBitmap(ypbit);
+                BitmapDescriptor yellowp_icon = BitmapDescriptorFactory.fromBitmap(ypbit); // Lab 5
 
                 Bitmap gp = BitmapFactory.decodeResource(getResources(),R.drawable.player_green);
                 Bitmap gpbit = Bitmap.createScaledBitmap(gp, icon_width, icon_height, false);
-                BitmapDescriptor greenp_icon = BitmapDescriptorFactory.fromBitmap(gpbit);
+                BitmapDescriptor greenp_icon = BitmapDescriptorFactory.fromBitmap(gpbit); // Lab 5
 
                 Bitmap bp = BitmapFactory.decodeResource(getResources(),R.drawable.player_blue);
                 Bitmap bpbit = Bitmap.createScaledBitmap(bp, icon_width, icon_height, false);
-                BitmapDescriptor bluep_icon = BitmapDescriptorFactory.fromBitmap(bpbit);
+                BitmapDescriptor bluep_icon = BitmapDescriptorFactory.fromBitmap(bpbit); // Lab 5
 
                 Bitmap rb1p = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.build1_red);
                 Bitmap rp1bbit = Bitmap.createScaledBitmap(rb1p, icon_width, icon_height, false);
-                BitmapDescriptor redp_b1 = BitmapDescriptorFactory.fromBitmap(rp1bbit);
+                BitmapDescriptor redp_b1 = BitmapDescriptorFactory.fromBitmap(rp1bbit); // Lab 5
 
                 Bitmap yb1p = BitmapFactory.decodeResource(getResources(),R.drawable.build1_yellow);
                 Bitmap yp1bbit = Bitmap.createScaledBitmap(yb1p, icon_width, icon_height, false);
-                BitmapDescriptor yellowp_b1 = BitmapDescriptorFactory.fromBitmap(yp1bbit);
+                BitmapDescriptor yellowp_b1 = BitmapDescriptorFactory.fromBitmap(yp1bbit); // Lab 5
 
                 Bitmap gb1p = BitmapFactory.decodeResource(getResources(),R.drawable.build1_green);
                 Bitmap gp1bbit = Bitmap.createScaledBitmap(gb1p, icon_width, icon_height, false);
-                BitmapDescriptor greenp_b1 = BitmapDescriptorFactory.fromBitmap(gp1bbit);
+                BitmapDescriptor greenp_b1 = BitmapDescriptorFactory.fromBitmap(gp1bbit); // Lab 5
 
                 Bitmap bb1p = BitmapFactory.decodeResource(getResources(),R.drawable.build1_blue);
                 Bitmap bpb1bit = Bitmap.createScaledBitmap(bb1p, icon_width, icon_height, false);
-                BitmapDescriptor bluep_b1 = BitmapDescriptorFactory.fromBitmap(bpb1bit);
+                BitmapDescriptor bluep_b1 = BitmapDescriptorFactory.fromBitmap(bpb1bit); // Lab 5
 
                 Bitmap rb2p = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.build2_red);
                 Bitmap rp2bbit = Bitmap.createScaledBitmap(rb2p, icon_width, icon_height, false);
-                BitmapDescriptor redp_b2 = BitmapDescriptorFactory.fromBitmap(rp2bbit);
+                BitmapDescriptor redp_b2 = BitmapDescriptorFactory.fromBitmap(rp2bbit); // Lab 5
 
                 Bitmap yb2p = BitmapFactory.decodeResource(getResources(),R.drawable.build2_yellow);
                 Bitmap yp2bbit = Bitmap.createScaledBitmap(yb2p, icon_width, icon_height, false);
-                BitmapDescriptor yellowp_b2 = BitmapDescriptorFactory.fromBitmap(yp2bbit);
+                BitmapDescriptor yellowp_b2 = BitmapDescriptorFactory.fromBitmap(yp2bbit); // Lab 5
 
                 Bitmap gb2p = BitmapFactory.decodeResource(getResources(),R.drawable.build2_green);
                 Bitmap gp2bbit = Bitmap.createScaledBitmap(gb2p, icon_width, icon_height, false);
-                BitmapDescriptor greenp_b2 = BitmapDescriptorFactory.fromBitmap(gp2bbit);
+                BitmapDescriptor greenp_b2 = BitmapDescriptorFactory.fromBitmap(gp2bbit); // Lab 5
 
                 Bitmap bb2p = BitmapFactory.decodeResource(getResources(),R.drawable.build2_blue);
                 Bitmap bpb2bit = Bitmap.createScaledBitmap(bb2p, icon_width, icon_height, false);
-                BitmapDescriptor bluep_b2 = BitmapDescriptorFactory.fromBitmap(bpb2bit);
+                BitmapDescriptor bluep_b2 = BitmapDescriptorFactory.fromBitmap(bpb2bit); // Lab 5
 
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0))); // Lab 4
+                // animateCamera Lab 3
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10)); // Lab 4
 
                 desc.setText("Starting " + numplayer + " Players game" +
                         "\n開始" + numplayer + "人遊戲" + "\n\n Initializing map 地圖初始中");
@@ -217,17 +218,22 @@ public class result extends AppCompatActivity {
                         if (finalIn[0] == pointX.length){
                             finalIn[0] = 0;
                         }
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn[0])));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-                        polylineOptions.add(loc_coor.get(finalIn[0]));
-                        mMap.addPolyline(polylineOptions);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn[0]))); // Lab 4
+                        // animateCamera Lab 3
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(10)); // Lab 4
+                        polylineOptions.add(loc_coor.get(finalIn[0])); // Lab 6
+                        mMap.addPolyline(polylineOptions); // Lab 6
                     }, 400L * finalIn[0]);
                 }
 
                 final Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(() -> {
+                    // CameraPosition Lab 8
                     final CameraPosition posisikamera = new CameraPosition.Builder().target(CENTRALTW).zoom(7).build();
+                    // animateCamera Lab 3
+                    // CameraPosition Lab 8
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(posisikamera), 1000, new GoogleMap.CancelableCallback() {
+                        // Lab 4
                         @Override
                         public void onFinish() {
                             desc.setText("There are 15 cities \n 總共有15個城市 \n\n Buy them all to win this game!\n全部購買即可贏得遊戲！");
@@ -243,15 +249,18 @@ public class result extends AppCompatActivity {
                 final Handler outerhandler = new Handler(Looper.getMainLooper());
                 outerhandler.postDelayed(() -> {
                     player_seq = getRandomNonRepeatingIntegers(numplayer);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(0)));  // Lab 4
+                    // animateCamera Lab 3
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(13));  // Lab 4
                     if (numplayer == 2){
                         desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
                                 player_seq.get(1));
 
+                        // addMarker Lab 3
                         p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
                         assert p1_mark != null;
                         p1_mark.setIcon(redp_icon);
+                        // addMarker Lab 3
                         p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
                         assert p2_mark != null;
                         p2_mark.setIcon(yellowp_icon);
@@ -259,13 +268,15 @@ public class result extends AppCompatActivity {
                     else if(numplayer == 3){
                         desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
                                 player_seq.get(1) +" "+ player_seq.get(2));
-
+                        // addMarker Lab 3
                         p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
                         assert p1_mark != null;
                         p1_mark.setIcon(redp_icon);
+                        // addMarker Lab 3
                         p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
                         assert p2_mark != null;
                         p2_mark.setIcon(yellowp_icon);
+                        // addMarker Lab 3
                         p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
                         assert p3_mark != null;
                         p3_mark.setIcon(greenp_icon);
@@ -273,16 +284,19 @@ public class result extends AppCompatActivity {
                     else if (numplayer == 4){
                         desc.setText("Player sequence 玩家序列: \n" + player_seq.get(0) +" " +
                                 player_seq.get(1) +" "+ player_seq.get(2) +" "+ player_seq.get(3));
-
+                        // addMarker Lab 3
                         p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 1"));
                         assert p1_mark != null;
                         p1_mark.setIcon(redp_icon);
+                        // addMarker Lab 3
                         p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude + 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 2"));
                         assert p2_mark != null;
                         p2_mark.setIcon(yellowp_icon);
+                        // addMarker Lab 3
                         p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude - 0.01)).title("Player 3"));
                         assert p3_mark != null;
                         p3_mark.setIcon(greenp_icon);
+                        // addMarker Lab 3
                         p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(0).latitude - 0.01, loc_coor.get(0).longitude + 0.01)).title("Player 4"));
                         assert p4_mark != null;
                         p4_mark.setIcon(bluep_icon);
@@ -359,28 +373,32 @@ public class result extends AppCompatActivity {
                       for (int in = player_position[player_seq.get(player_now-1)-1] ; in <= player_position[player_seq.get(player_now-1)-1] + dicenum; in++) {
                         int finalIn = (in) % 15;
                          playertest.postDelayed(() -> {
-                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));
-                             mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_coor.get(finalIn)));  // Lab 4
+                             mMap.animateCamera(CameraUpdateFactory.zoomTo(10));  // Lab 4
                              if(player_seq.get(player_now-1) == 1){
                                  p1_mark.remove();
+                                 // addMarker Lab 3
                                  p1_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 1"));
                                  assert p1_mark != null;
                                  p1_mark.setIcon(redp_icon);
                              }
                              else if(player_seq.get(player_now-1) == 2){
                                  p2_mark.remove();
+                                 // addMarker Lab 3
                                  p2_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude + 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 2"));
                                  assert p2_mark != null;
                                  p2_mark.setIcon(yellowp_icon);
                              }
                              else if(player_seq.get(player_now-1) == 3){
                                  p3_mark.remove();
+                                 // addMarker Lab 3
                                  p3_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude - 0.01)).title("Player 3"));
                                  assert p3_mark != null;
                                  p3_mark.setIcon(greenp_icon);
                              }
                              else if(player_seq.get(player_now-1) == 4){
                                  p4_mark.remove();
+                                 // addMarker Lab 3
                                  p4_mark = mMap.addMarker(new MarkerOptions().position(new LatLng(loc_coor.get(finalIn).latitude - 0.01, loc_coor.get(finalIn).longitude + 0.01)).title("Player 4"));
                                  assert p4_mark != null;
                                  p4_mark.setIcon(bluep_icon);
@@ -391,6 +409,7 @@ public class result extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Player " + player_seq.get(player_now - 1) + " On the way to " + cities_name[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15]
                                         + "\n玩家" + player_seq.get(player_now - 1) + "在路上往" + cities_name_ch[(player_position[player_seq.get(player_now-1)-1] + dicenum)%15], Toast.LENGTH_LONG).show();
                                 player_position[player_seq.get(player_now-1)-1] = player_position[player_seq.get(player_now-1)-1] + dicenum;
+                                // Lab 7
                             }, 2000);
 
                             final Handler autobuy = new Handler(Looper.getMainLooper());
@@ -403,6 +422,7 @@ public class result extends AppCompatActivity {
                                                     "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
                                         }
                                         else{
+                                            // addMarker Lab 3
                                             p1_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 1 Building")));
                                             p1_build.get(p1_build.size() - 1).setIcon(redp_b1);
 
@@ -423,6 +443,7 @@ public class result extends AppCompatActivity {
                                                     "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
                                         }
                                         else{
+                                            // addMarker Lab 3
                                             p2_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
                                             p2_build.get(p2_build.size()-1).setIcon(yellowp_b1);
 
@@ -444,6 +465,7 @@ public class result extends AppCompatActivity {
                                                     "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
                                         }
                                         else{
+                                            // addMarker Lab 3
                                             p3_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 2 Building")));
                                             p3_build.get(p3_build.size()-1).setIcon(greenp_b1);
 
@@ -464,6 +486,7 @@ public class result extends AppCompatActivity {
                                                     "!\n玩家" + player_seq.get(player_now-1) + "錢不足, 買不到" + cities_name_ch[player_position[player_seq.get(player_now-1)-1]%15] + "!");
                                         }
                                         else{
+                                            // addMarker Lab 3
                                             p4_build.add(mMap.addMarker(new MarkerOptions().position(loc_coor.get(player_position[player_seq.get(player_now - 1) - 1]%15)).title("Player 4 Building")));
                                             p4_build.get(p4_build.size()-1).setIcon(bluep_b1);
 
